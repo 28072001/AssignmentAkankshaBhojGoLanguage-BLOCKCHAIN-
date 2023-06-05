@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/syndtr/goleveldb/leveldb"
-)
+) 
 
 // Transaction represents a single transaction.
 type Transaction struct {
