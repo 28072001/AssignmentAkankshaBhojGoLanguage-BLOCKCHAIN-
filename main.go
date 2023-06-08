@@ -296,8 +296,11 @@ rand.Seed(time.Now().UnixNano())
 
 
 	// Process input transactions
+	// Process input transactions
 	inputTxns := make([]Transaction, 0)
-	for i := 1; i <= 10000; i++ {
+
+for j := 1; j <= 10; j++ {
+	for i := 1; i <= 1000; i++ {
 		version := roundToNearest(rand.Float64()*4.0 + 1.0) // Generate a random version between 1.0 and 5.0 and round off to the nearest whole number
 		txn := Transaction{
 			ID:      fmt.Sprintf("SIM%d", i),
