@@ -296,7 +296,6 @@ rand.Seed(time.Now().UnixNano())
 
 
 	// Process input transactions
-	// Process input transactions
 	inputTxns := make([]Transaction, 0)
 
 for j := 1; j <= 10; j++ {
@@ -309,6 +308,7 @@ for j := 1; j <= 10; j++ {
 		}
 		inputTxns = append(inputTxns, txn)
 	}
+}
 
 	for _, txn := range inputTxns {
 		blockChain.AddTransaction(txn)
@@ -391,5 +391,4 @@ func (bc *BlockChain) GetBlockDetailsByNumber(blockNumber int) *Block {
 func roundToNearest(x float64) float64 {
 	return math.Round(x)
 }
-
 
