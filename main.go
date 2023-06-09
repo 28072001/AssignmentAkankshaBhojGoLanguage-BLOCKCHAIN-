@@ -33,6 +33,14 @@ const (
 	Committed BlockStatus = "committed"
 	Pending   BlockStatus = "pending"
 )
+//Interface of Blockchain
+type BlockChainInterface interface {
+	Start()
+	AddTransaction(txn Transaction)
+	GetBlockDetailsByNumber(blockNumber int) *Block
+	PrintAllBlockDetails()
+	ReadBlocksFromFile() error
+}
 
 // Block represents a block in the blockchain.
 type Block struct {
@@ -73,6 +81,8 @@ func NewBlockChain(fileName string, db *leveldb.DB, hashChanSize, writeChanSize,
 		CurrentCounter: 0,
 	}
 }
+
+
 
 // Start starts the block processing and writing to the file.
 func (bc *BlockChain) Start() {
@@ -286,11 +296,14 @@ func main() {
 		}
 	}
 
-	// Create a new blockchain
-	blockChain := NewBlockChain("ledger.txt", db, 100, 100, 1000)
+
+
+
+txnsPerBlock := getTransactionsPerBlockFromEnv()
+blockChain := NewBlockChain("ledger.txt", db, 100, 100, txnsPerBlock)
 	blockChain.Start()
 
-// }
+
 rand.Seed(time.Now().UnixNano())
 
 
@@ -322,7 +335,7 @@ for j := 1; j <= 10; j++ {
 	<-blockChain.DoneChan
    // Print details of all blocks
     blockChain.PrintAllBlockDetails()
-	blockChain.ReadBlocksFromFile()
+	//blockChain.ReadBlocksFromFile()
 }
 
 func (bc *BlockChain) AddTransaction(txn Transaction) {
@@ -384,11 +397,18 @@ func (bc *BlockChain) GetBlockDetailsByNumber(blockNumber int) *Block {
 		}
 	}
 
-	return block
-}
+	return block}
 
-// Function to round a float64 value to the nearest whole number
+// Function to round a float64 value to the nearest whole number9090
 func roundToNearest(x float64) float64 {
 	return math.Round(x)
 }
-
+func getTransactionsPerBlockFromEnv() int {
+	txnsPerBlockStr := os.Getenv("TRANSACTIONS_PER_BLOCK")
+	txnsPerBlock, err := strconv.Atoi(txnsPerBlockStr)
+	if err != nil || txnsPerBlock <= 0 {
+		log.Println("Invalid value for TRANSACTIONS_PER_BLOCK environment variable. Using default value: 1")
+		return 1
+	}
+	return txnsPerBlock
+}
